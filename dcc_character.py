@@ -6,9 +6,7 @@ file_separator = '-' * 80
 
 
 class CharacterSheet(object):
-
     def __init__(self, name, do_gen, load_stats):
-
         self.name = ""
         self.alignment = "Lawful / Neutral / Chaotic"
         self.occupation = ""
@@ -37,21 +35,15 @@ class CharacterSheet(object):
         self.purse = {'gp': 0, 'sp': 0, 'cp': 0}
 
         if do_gen:
-
             self.__generate_random_character()
-
             self.name = name
-
             self.equipment = equipment.get(roll_die(1, 24))
-
             self.purse['cp'] = roll_die(5, 12)
 
         else:
-
             self.__load_character_details(load_stats)
 
     def __generate_random_character(self):
-
         self.__generate_ability_scores()
         self.__set_score_modifiers()
         self.__roll_health()
@@ -60,32 +52,23 @@ class CharacterSheet(object):
         self.__generate_languages()
 
     def __generate_ability_scores(self):
-
         for score in self.ability_scores:
-
             self.ability_scores[score] = roll_die(3, 6)
 
     def __set_score_modifiers(self):
-
         for score in self.ability_scores:
-
             self.score_modifiers[score] = score_modifiers.get(self.ability_scores.get(score))
 
     def __roll_health(self):
-
         self.hit_points = roll_die(1, 4)
-
         self.hit_points += self.score_modifiers.get('Stamina')
 
         if self.hit_points <= 0:
             self.hit_points = 1
 
     def __generate_occupation(self):
-
         selected_occupation = roll_die(1, 100)
-
         self.occupation = occupation.get(selected_occupation)
-
         self.weapon = trained_weapon.get(selected_occupation)
 
         if selected_occupation == 62:
@@ -105,11 +88,9 @@ class CharacterSheet(object):
             self.purse['cp'] += 100
 
         else:
-
             self.trade_goods = trade_goods.get(selected_occupation)
 
     def __generate_luck_roll(self):
-
         luck_roll = roll_die(1, 30) + self.score_modifiers.get('Luck')
 
         if luck_roll > 30:
@@ -121,16 +102,13 @@ class CharacterSheet(object):
         self.lucky_roll = luck_score.get(luck_roll)
 
     def __generate_languages(self):
-
         if self.score_modifiers.get('Intelligence') <= 0:
             return
 
         for i in range(self.score_modifiers.get('Intelligence')):
-
             self.languages += ", " + get_random_language()
 
     def __load_character_details(self, data):
-
         self.name = data[0].removeprefix('Name: ')
         self.alignment = data[1].removeprefix('Alignment: ')
         self.occupation = data[2].removeprefix('Occupation: ')
@@ -140,20 +118,15 @@ class CharacterSheet(object):
         score_index = 5
 
         for score in self.ability_scores:
-
             load_scores = data[score_index].removeprefix(score.title() + ": ").split()
-
             self.ability_scores[score] = int(load_scores[0])
-
             self.score_modifiers[score] = int(load_scores[1].removeprefix('(').removesuffix(')'))
-
             score_index += 1
 
         self.lucky_roll = data[11].removeprefix('Lucky Roll: ')
         self.equipment = data[12].removeprefix('Equipment: ')
         self.trade_goods = data[13].removeprefix('Trade Goods: ')
         self.languages = data[14].removeprefix('Known Languages: ')
-
         purse_string = data[15].removeprefix('Purse: ').split()
 
         self.purse['gp'] = int(purse_string[0].removesuffix('gp'))
@@ -161,7 +134,6 @@ class CharacterSheet(object):
         self.purse['cp'] = int(purse_string[2].removesuffix('cp'))
 
     def get_character_details(self):
-
         purse_value = str(self.purse.get('gp')) + "gp " + \
             str(self.purse.get('sp')) + "sp " + \
             str(self.purse.get('cp')) + "cp"
@@ -186,7 +158,6 @@ class CharacterSheet(object):
             """)
 
     def get_character_info(self, index):
-
         if index == 0:
             return self.name.replace("\n", "")
         elif index == 1:
@@ -232,18 +203,15 @@ class CharacterSheet(object):
 # region FUNCTIONS
 
 def roll_die(rolls, faces):
-
     total_roll = 0
 
     for i in range(rolls):
-
         total_roll += randint(1, faces)
 
     return total_roll
 
 
 def roll_ammo(weapon_name):
-
     if 'sling' in weapon_name.lower():
         ammo_type = 'Rocks'
 
@@ -257,7 +225,6 @@ def roll_ammo(weapon_name):
 
 
 def get_random_language():
-
     roll = roll_die(1, 100)
 
     if 1 <= roll <= 20:

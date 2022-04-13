@@ -11,11 +11,8 @@ dcc_file = "DCC 0-Level Characters.txt"
 # region GUI_ELEMENTS
 
 tk_root = Tk()
-
 frm_main_buttons = Frame(master=tk_root)
-
 frm_character_buttons = Frame(master=frm_main_buttons)
-
 ui_font = font.Font(family="Sylfaen")
 
 info_label_list = []
@@ -26,11 +23,9 @@ info_label_list = []
 # region CHARACTER_FILE_CALLBACKS
 
 def generate_character(char_file, name_id):
-
     char_name = "Character #" + str(name_id)
-
     new_character = CharacterSheet(char_name, True, "")
-
+    
     char_file.write(new_character.get_character_details())
 
     print(f"{new_character.name} successfully generated!")
@@ -39,49 +34,37 @@ def generate_character(char_file, name_id):
 
 
 def read_generated_characters():
-
     is_empty = False
 
     try:
         character_file = open(dcc_file, 'r')
 
     except FileNotFoundError:
-
         open(dcc_file, 'x')
-
         is_empty = True
-
         character_file = open(dcc_file, 'r')
 
     if not is_empty:
-
         existing_characters = character_file.readlines()
-
         convert_character_file(existing_characters)
 
     character_file.close()
 
 
 def convert_character_file(lines):
-
     line_index = 1
-
     full_character_list = []
 
     for i in range(20):
-
         new_character_list = []
 
         read_lines = True
 
         while read_lines:
-
             if line_index > len(lines) - 1 or lines[line_index] == "\n":
-
                 read_lines = False
 
             else:
-
                 new_character_list.append(lines[line_index])
 
             line_index += 1
@@ -89,7 +72,6 @@ def convert_character_file(lines):
         full_character_list.append(new_character_list)
 
     for i in full_character_list:
-
         generated_character_list.append(CharacterSheet('', False, i))
 
 # endregion
@@ -98,39 +80,28 @@ def convert_character_file(lines):
 # region UI_CALLBACKS
 
 def create_gui():
-
     tk_root.geometry('880x470')
-
     tk_root.minsize(width=880, height=470)
     tk_root.maxsize(width=880, height=470)
-
     tk_root.title("DCC Character Generator")
 
     create_buttons_frame()
-
     create_info_frame()
 
 
 def create_buttons_frame():
-
     frm_options_buttons = Frame(master=frm_main_buttons)
-
     gen = Button(master=frm_options_buttons, text="Generate All", command=on_button_generate)
-
     quit_btn = Button(master=frm_options_buttons, text="Exit", command=tk_root.destroy)
 
     frm_main_buttons.grid(row=0, column=0, padx=5, pady=5)
-
     frm_character_buttons.pack(padx=5, pady=5)
-
     frm_options_buttons.pack(padx=5, pady=5)
-
     gen.pack(padx=5, pady=5)
     quit_btn.pack(padx=5, pady=5)
 
 
 def create_info_frame():
-
     frm_main_info = Frame(master=tk_root, relief=RIDGE, padding=10)
 
     lbl_name_title = Label(
@@ -258,8 +229,6 @@ def create_info_frame():
     info_label_list.append(lbl_equipment)
     info_label_list.append(lbl_trade_goods)
 
-    # ---------- #
-
     frm_main_info.grid(row=0, column=1)
 
     lbl_name_title.grid(row=0, column=0, sticky="nsew")
@@ -300,16 +269,13 @@ def create_info_frame():
 
 
 def display_character_buttons():
-
     index = 1
 
     for i in range(4):
-
         frm_character_buttons.columnconfigure(i, weight=1, minsize=50)
         frm_character_buttons.rowconfigure(i, weight=1, minsize=20)
 
         for j in range(5):
-
             new_button = Button(
                 master=frm_character_buttons,
                 text=f"# {index}",
@@ -317,16 +283,12 @@ def display_character_buttons():
             )
 
             new_button.grid(row=i, column=j, padx=5, pady=5, sticky="nsew")
-
             index += 1
 
 
 def on_button_generate():
-
     character_file = open(dcc_file, 'a')
-
     character_file.truncate(0)
-
     generated_character_list.clear()
 
     for i in range(1, 21):
@@ -335,18 +297,15 @@ def on_button_generate():
     character_file.close()
 
     display_character_buttons()
-
     clear_character_sheet()
 
 
 def on_button_character(character_number):
-
     for i in range(20):
         info_label_list[i]["text"] = generated_character_list[character_number - 1].get_character_info(i)
 
 
 def clear_character_sheet():
-
     for i in range(20):
         info_label_list[i]["text"] = ""
 
@@ -356,7 +315,6 @@ def clear_character_sheet():
 # region MAIN
 
 def start_generator():
-
     print(f"\n\n{separator}")
     print("\n" + "Dungeon Crawl Classics".center(80))
     print("0-Level Character Creator".center(80))
@@ -365,11 +323,9 @@ def start_generator():
     read_generated_characters()
 
     if generated_character_list:
-
         display_character_buttons()
 
     create_gui()
-
     mainloop()
 
 # endregion
